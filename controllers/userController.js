@@ -8,7 +8,7 @@ const saveSteps = async (req, res) => {
       console.log(req.body);
       url=req.body.url 
       steps=req.body.steps
-      datee=req.body.date
+      
 
       if(url.includes("rudresh")){
         username="rudresh"
@@ -20,7 +20,7 @@ const saveSteps = async (req, res) => {
       const newStepsEntry = new UserSteps({
         username,
         steps,
-        datee
+        
       });
       await newStepsEntry.save();
        
@@ -48,9 +48,9 @@ const saveSteps = async (req, res) => {
         else{
             rudresh.push(element.steps)
         }
-        
-        dayss.push(element.date)
-        console.log(element.date)
+        //console.log(element.date.toString().slice(0,10))
+        dayss.push(element.date.toString().slice(0,10))
+        //console.log(element.date)
     });
         res.send({"paridhi":paridhi,"rudresh":rudresh,"days":dayss})
     }
