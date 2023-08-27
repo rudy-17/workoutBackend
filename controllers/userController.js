@@ -4,10 +4,14 @@ const UserSteps=require("../models/userStep")
 
 const saveSteps = async (req, res) => {
     try {
+        console.log("inside save route")
       console.log("steps");
       console.log(req.body);
       url=req.body.url 
       steps=req.body.steps
+      var nowDate = new Date(); 
+      var date = nowDate.getDate() +'/'+(nowDate.getMonth()+1)+'/'+nowDate.getFullYear()
+      console.log(date)
       
 
       if(url.includes("rudresh")){
@@ -20,6 +24,7 @@ const saveSteps = async (req, res) => {
       const newStepsEntry = new UserSteps({
         username,
         steps,
+        date
         
       });
       await newStepsEntry.save();
@@ -61,4 +66,46 @@ const saveSteps = async (req, res) => {
 
   }
 
-module.exports = {saveSteps , getSteps}
+  const verifyToday=async (req,res)=>{
+
+    console.log(req.body)
+    let username=req.body.username
+    if(username.includes("paridhi")){
+        username="paridhi"
+    }
+    else{
+        username="rudresh"
+    }
+    
+    var nowDate = new Date(); 
+    var datee = nowDate.getDate() +'/'+(nowDate.getMonth()+1)+'/'+nowDate.getFullYear()
+    
+    console.log(datee)
+
+    await UserSteps.find({username:username,date:datee}).then(response=>{
+        console.log(response)
+        if(response.length==1){
+            res.send({"result":true})
+        }
+        else{
+            res.send({"result":false})
+        }
+        
+    }).catch(error=>{
+        res.send(error)
+    })
+
+    
+
+  }
+
+  const deleteAll=async (req,res)=>{
+
+
+    await UserSteps.deleteMany().then(result=>{
+        res.send(result)
+    }).catch(error=>{
+        res.send(error)
+    })
+  }
+module.exports = {saveSteps , getSteps,deleteAll,verifyToday}
