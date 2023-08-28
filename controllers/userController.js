@@ -84,12 +84,12 @@ const saveSteps = async (req, res) => {
 
     await UserSteps.find({username:username,date:datee}).then(response=>{
         console.log(response)
-        if(response.length==1){
+        if(response.length>=1){
             res.send({"result":true})
         }
         else{
             res.send({"result":false})
-        }
+        } 
         
     }).catch(error=>{
         res.send(error)
@@ -97,6 +97,34 @@ const saveSteps = async (req, res) => {
 
     
 
+  }
+
+  const analytics=async(req,res)=>{
+
+    let url=req.body.username
+    let username=""
+    console.log(req.body)
+    if(url.includes("paridhi")){
+        username="paridhi"
+    }
+    else{
+        username="rudresh"
+    }
+    
+    let totalSteps=0
+    let results=[]
+
+    await UserSteps.find({"username":username}).then(response=>{
+        results=response
+        for(let i=0;i<results.length;i++){
+            totalSteps+=results[i].steps
+        }
+        res.send({"steps":totalSteps})
+    }).catch(error=>{
+        res.send(error
+            )
+    })
+   
   }
 
   const deleteAll=async (req,res)=>{
@@ -108,4 +136,4 @@ const saveSteps = async (req, res) => {
         res.send(error)
     })
   }
-module.exports = {saveSteps , getSteps,deleteAll,verifyToday}
+module.exports = {saveSteps , getSteps,deleteAll,verifyToday,analytics}
